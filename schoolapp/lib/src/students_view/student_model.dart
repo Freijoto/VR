@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class StudentModel {
   int cod;
   String name;

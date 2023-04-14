@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:schoolapp/src/class_view/class_view.dart';
+import 'package:schoolapp/src/common/utilities/school_assets.dart';
+import 'package:schoolapp/src/common/utilities/school_colors.dart';
+import 'package:schoolapp/src/common/utilities/school_icons.dart';
+import 'package:schoolapp/src/common/utilities/school_numeric_atributes.dart';
+import 'package:schoolapp/src/common/utilities/school_strings.dart';
 import 'package:schoolapp/src/componnents/custom_button.dart';
 import 'package:schoolapp/src/register_view/register_view.dart';
 import 'package:schoolapp/src/students_view/student_view.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key, required this.title});
+  const HomeView({super.key});
 
-  final String title;
+  final String title = SchoolStrings.schoolAppTitle;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -19,13 +24,12 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-                colors: [
-              Color.fromARGB(255, 40, 100, 125),
-              Color.fromARGB(255, 71, 166, 213)
-            ])),
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: [SchoolColors.darkBackground, SchoolColors.lightBackground],
+          ),
+        ),
         child: Column(
           children: [
             Flexible(
@@ -33,54 +37,45 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 children: [
                   Flexible(
-                      flex: 2,
-                      child: Container(
-                        child: Center(
-                            child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: Image.asset("assets/images/Logo.png"),
-                        )),
-                      )),
-                  Flexible(
-                      flex: 1,
+                    flex: 2,
+                    child: Center(
+                      child: Padding(
+                        padding: SchoolPadding.xLarge,
+                        child: Image.asset(SchoolAssets.logo),
+                      ),
+                    ),
+                  ),
+                  const Flexible(
+                    flex: 1,
+                    child: FittedBox(
                       child: Center(
-                          child: Container(
-                              child: Text(
-                        "School App",
-                        style: TextStyle(
-                            fontFamily: 'Lobster',
-                            fontSize: 85,
-                            color: Color.fromARGB(255, 245, 245, 245)),
-                      ))))
+                        child: Text(
+                          SchoolStrings.schoolAppTitle,
+                          style: SchoolStringsStyles.titleStyle,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
             Flexible(
               flex: 1,
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: SchoolPadding.medium,
                 child: Column(
-                  children: [
+                  children: const [
                     CustomButton(
-                        icon: Icon(
-                          Icons.account_circle_sharp,
-                          color: Color.fromARGB(255, 71, 166, 213),
-                        ),
-                        title: "Alunos",
+                        icon: SchoolIcons.schoolStudentsIcon,
+                        title: SchoolStrings.studentsTitle,
                         target: StudentView()),
                     CustomButton(
-                        icon: Icon(
-                          Icons.book,
-                          color: Color.fromARGB(255, 71, 166, 213),
-                        ),
-                        title: "Cursos",
+                        icon: SchoolIcons.schoolClassesIcon,
+                        title: SchoolStrings.classTitle,
                         target: ClassView()),
                     CustomButton(
-                        icon: Icon(
-                          Icons.assignment_add,
-                          color: Color.fromARGB(255, 71, 166, 213),
-                        ),
-                        title: "Matriculas",
+                        icon: SchoolIcons.schoolRegistersIcon,
+                        title: SchoolStrings.registerTitle,
                         target: RegisterView()),
                   ],
                 ),

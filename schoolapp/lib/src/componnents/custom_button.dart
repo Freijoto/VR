@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:schoolapp/src/students_view/student_view.dart';
+import 'package:schoolapp/src/common/utilities/school_colors.dart';
+import 'package:schoolapp/src/common/utilities/school_numeric_atributes.dart';
+import 'package:schoolapp/src/common/utilities/school_strings.dart';
 
 class CustomButton extends StatelessWidget {
   final Icon icon;
@@ -17,37 +19,35 @@ class CustomButton extends StatelessWidget {
       flex: 1,
       child: GestureDetector(
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: SchoolPadding.medium,
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color.fromARGB(255, 235, 235, 235),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(SchoolRadius.large),
+              color: SchoolColors.lightButtonColor,
             ),
             /*child: FittedBox(*/
             child: Row(
               children: [
                 Flexible(
+                  flex: 1,
                   child: FittedBox(
                     child: Padding(
-                      padding: const EdgeInsets.all(6.0),
+                      padding: SchoolPadding.medium,
                       child: icon,
                     ),
                   ),
-                  flex: 1,
                 ),
                 Flexible(
+                  flex: 3,
                   child: FittedBox(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: SchoolPadding.medium,
                       child: Text(
                         title,
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 125, 125, 125),
-                            fontSize: 48.0),
+                        style: SchoolStringsStyles.largeButtonTitle,
                       ),
                     ),
                   ),
-                  flex: 3,
                 ),
               ],
             ),
@@ -56,7 +56,6 @@ class CustomButton extends StatelessWidget {
         onTap: () => {_navigate(context)},
       ),
     );
-    //);
   }
 
   _navigate(dynamic context) {

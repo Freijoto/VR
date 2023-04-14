@@ -34,77 +34,78 @@ app.get('/aluno', async (req, res) => {
     }
   })
 
-app.post('/addaluno', (req,res) => {
+app.post('/addaluno', async (req,res) => {
   try {
-    const result = db.query(`call dbo.add_aluno(${req.query.nome})`);
+    const result = await db.query(`call dbo.add_aluno(${req.query.nome})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
     console.error(err);
   }
 })
 
-app.post('/addcurso', (req,res) => {
+app.post('/addcurso', async (req,res) => {
   try {
     console.log(`call dbo.add_curso(${req.query.descricao},${req.query.ementa})`);
-    const result = db.query(`call dbo.add_curso(${req.query.descricao},${req.query.ementa})`);
+    const result = await db.query(`call dbo.add_curso(${req.query.descricao},${req.query.ementa})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
     console.error(err);
   }
 })
 
-app.post('/addmatricula', (req,res) => {
+app.post('/addmatricula', async (req,res) => {
   try {
     console.log(`call dbo.add_matricula(${req.query.codcurso},${req.query.codaluno})`);
-    const result = db.query(`call dbo.add_matricula(${req.query.codcurso},${req.query.codaluno})`);
+    const result = await db.query(`call dbo.add_matricula(${req.query.codcurso},${req.query.codaluno})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
     console.error(err);
   }
 })
 
-app.put('/updaluno',(req,res) => {
+app.put('/updaluno',async (req,res) => {
   try {
-    const result = db.query(`call dbo.upd_aluno(${req.query.codigo},${req.query.nome})`);
+    const result = await db.query(`call dbo.upd_aluno(${req.query.codigo},${req.query.nome})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
     console.error(err);
   }
 })
 
-app.put('/updcurso',(req,res) => {
+app.put('/updcurso',async (req,res) => {
   try {
-    const result = db.query(`call dbo.upd_curso(${req.query.codigo},${req.query.descricao},${req.query.ementa})`);
+    const result = await db.query(`call dbo.upd_curso(${req.query.codigo},${req.query.descricao},${req.query.ementa})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
     console.error(err);
   }
 })
 
-app.delete('/delaluno',(req,res) => {
+app.delete('/delaluno',async (req,res) => {
   try {
-    const result = db.query(`call dbo.del_aluno(${req.query.codigo})`);
+    const result = await db.query(`call dbo.del_aluno(${req.query.codigo})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
     console.error(err);
   }
 })
 
-app.delete('/delcurso',(req,res) => {
+app.delete('/delcurso',async (req,res) => {
   try {
-    const result = db.query(`call dbo.del_curso(${req.query.codigo})`);
+    const result = await db.query(`call dbo.del_curso(${req.query.codigo})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
-    console.error(err);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+    
   }
 })
 
-app.delete('/delmatricula',(req,res) => {
+app.delete('/delmatricula',async (req,res) => {
   try {
-    const result = db.query(`call dbo.del_matricula(${req.query.codigo})`);
+    const result = await db.query(`call dbo.del_matricula(${req.query.codigo})`);
     res.status(200).json('{sucess=true}')
   } catch (err) {
-    console.error(err);
+    next(err)
   }
 })
 

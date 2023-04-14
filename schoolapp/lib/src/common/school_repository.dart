@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:schoolapp/src/class_view/class_model.dart';
+import 'package:schoolapp/src/common/utilities/school_network_const.dart';
 import 'package:schoolapp/src/register_view/register_model.dart';
 import 'package:schoolapp/src/students_view/student_model.dart';
 
@@ -9,7 +10,7 @@ class SchoolRepository {
   SchoolRepository._instantiate();
   static final SchoolRepository instance = SchoolRepository._instantiate();
 
-  final String _baseUrl = '192.168.0.114:1802';
+  final String _baseUrl = SchoolNetworkStrings.baseUrl;
 
   Future<List<StudentModel>> getStudents(parameters, route) async {
     Uri uri = Uri.http(
@@ -19,7 +20,7 @@ class SchoolRepository {
     );
 
     Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.contentTypeHeader: SchoolNetworkStrings.baseHeader,
     };
 
     var response = await http.get(uri, headers: headers);
@@ -43,7 +44,7 @@ class SchoolRepository {
     );
 
     Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.contentTypeHeader: SchoolNetworkStrings.baseHeader,
     };
 
     var response = await http.get(uri, headers: headers);
@@ -67,7 +68,7 @@ class SchoolRepository {
     );
 
     Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.contentTypeHeader: SchoolNetworkStrings.baseHeader,
     };
 
     var response = await http.get(uri, headers: headers);
@@ -91,9 +92,9 @@ class SchoolRepository {
     );
 
     Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.contentTypeHeader: SchoolNetworkStrings.baseHeader,
     };
-    print(Uri.parse(uri.toString()));
+
     var response = await http.put(uri, headers: headers);
     if (response.statusCode == 200) {
       return true;
@@ -110,9 +111,9 @@ class SchoolRepository {
     );
 
     Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.contentTypeHeader: SchoolNetworkStrings.baseHeader,
     };
-    //print(Uri.parse(uri.toString()));
+
     var response = await http.post(uri, headers: headers);
     if (response.statusCode == 200) {
       return true;
@@ -129,9 +130,9 @@ class SchoolRepository {
     );
 
     Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.contentTypeHeader: SchoolNetworkStrings.baseHeader,
     };
-    print(Uri.parse(uri.toString()));
+
     var response = await http.delete(uri, headers: headers);
     if (response.statusCode == 200) {
       return true;

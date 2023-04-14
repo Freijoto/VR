@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:schoolapp/src/common/utilities/school_colors.dart';
+import 'package:schoolapp/src/common/utilities/school_numeric_atributes.dart';
+import 'package:schoolapp/src/common/utilities/school_strings.dart';
 
 class StudentItem extends StatelessWidget {
   final int id;
@@ -14,21 +17,18 @@ class StudentItem extends StatelessWidget {
     return GestureDetector(
       child: Container(
         height: 75,
-        decoration: BoxDecoration(
-            color: Colors.white,
+        decoration: const BoxDecoration(
+            color: SchoolColors.lightButtonColor,
             border: Border(
                 bottom: BorderSide(
-                    color: Color.fromARGB(255, 79, 79, 79), width: 1))),
+                    color: SchoolColors.listSeparatorColor, width: 1))),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: SchoolPadding.medium,
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
               name,
-              style: TextStyle(
-                color: Colors.amber,
-                fontSize: 25,
-              ),
+              style: SchoolStringsStyles.mediumButtonTitle,
               textAlign: TextAlign.left,
             ),
           ),

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:schoolapp/src/common/utilities/school_colors.dart';
+import 'package:schoolapp/src/common/utilities/school_icons.dart';
+import 'package:schoolapp/src/common/utilities/school_numeric_atributes.dart';
+import 'package:schoolapp/src/common/utilities/school_strings.dart';
 import 'package:schoolapp/src/componnents/student_item.dart';
 import 'package:schoolapp/src/students_view/student_controller.dart';
 import 'package:schoolapp/src/students_view/student_model.dart';
@@ -20,7 +24,6 @@ class _StudentViewState extends State<StudentView> {
   @override
   void initState() {
     super.initState();
-    _controller.getStudent();
     loadData();
   }
 
@@ -28,64 +31,65 @@ class _StudentViewState extends State<StudentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 71, 166, 213),
-        title: Text("Alunos"),
+        backgroundColor: SchoolColors.lightBackground,
+        title: const Text(SchoolStrings.studentsTitle),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: SchoolPadding.medium,
             child: GestureDetector(
               child: Container(
                 height: 35,
                 width: 85,
-                color: Color.fromARGB(255, 62, 145, 187),
                 child: ElevatedButton(
-                  child: Text("Novo"),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 52, 120, 154)),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(builder: (context, setState) {
-                            return Container(
-                              height: MediaQuery.of(context).size.height * 0.95,
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  TextField(
-                                    decoration:
-                                        InputDecoration(labelText: 'Nome'),
-                                    onChanged: (value) => {_name = value},
-                                  ),
-                                  Center(
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                          flex: 1,
-                                          child: ElevatedButton(
-                                              onPressed: () => {
-                                                    addStudent(_name),
-                                                    Navigator.pop(context)
-                                                  },
-                                              child: Text('Salvar')),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text('Cancelar')),
-                                        )
-                                      ],
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: SchoolColors.darkBackground),
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                                builder: (context, setState) {
+                              return Container(
+                                color: SchoolColors.lightButtonColor,
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              SchoolStrings.studentNameTitle),
+                                      onChanged: (value) => {_name = value},
                                     ),
-                                  )
-                                ],
-                              ),
-                            );
+                                    Center(
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: ElevatedButton(
+                                                onPressed: () => {
+                                                      addStudent(_name),
+                                                      Navigator.pop(context)
+                                                    },
+                                                child: const Text(
+                                                    SchoolStrings.saveRecord)),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: ElevatedButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text(
+                                                    SchoolStrings.cancel)),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
                           });
-                        });
-                  },
-                ),
+                    },
+                    child: const Text(SchoolStrings.newRecord)),
               ),
               onTap: () => {},
             ),
@@ -98,32 +102,29 @@ class _StudentViewState extends State<StudentView> {
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
                 colors: [
-              Color.fromARGB(255, 40, 100, 125),
-              Color.fromARGB(255, 71, 166, 213)
+              SchoolColors.darkBackground,
+              SchoolColors.lightBackground,
             ])),
         child: Column(
           children: [
             Flexible(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Nome',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusColor: Colors.red,
+                  padding: SchoolPadding.medium,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: SchoolStrings.studentNameTitle,
+                      border: OutlineInputBorder(
+                        borderRadius: SchoolBorderRadius.medium,
                       ),
-                      onChanged: (value) => filterData(value),
                     ),
+                    onChanged: (value) => filterData(value),
                   ),
                 )),
             Flexible(
               flex: 10,
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: SchoolPadding.medium,
                 child: ListView.builder(
                   itemCount: _students.length,
                   itemBuilder: (context, index) {
@@ -137,16 +138,14 @@ class _StudentViewState extends State<StudentView> {
                                     return StatefulBuilder(
                                         builder: (context, setState) {
                                       return Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.95,
-                                        color: Colors.white,
+                                        color: SchoolColors.lightButtonColor,
                                         child: Column(
                                           children: [
                                             TextField(
                                               enabled: _editing,
-                                              decoration: InputDecoration(
-                                                  labelText: 'Nome'),
+                                              decoration: const InputDecoration(
+                                                  labelText: SchoolStrings
+                                                      .studentNameTitle),
                                               controller:
                                                   (TextEditingController(
                                                       text: _students[index]
@@ -182,20 +181,25 @@ class _StudentViewState extends State<StudentView> {
                                                                       })
                                                                 }
                                                             },
-                                                        child: Text('Editar')),
+                                                        child: const Text(
+                                                            SchoolStrings
+                                                                .edit)),
                                                   ),
                                                   Flexible(
                                                     flex: 1,
-                                                    child: ElevatedButton(
-                                                        onPressed: () => {
-                                                              deleteStudent(
-                                                                  _students[
-                                                                          index]
-                                                                      .cod),
-                                                              Navigator.pop(
-                                                                  context)
-                                                            },
-                                                        child: Text('Deletar')),
+                                                    child:
+                                                        ElevatedButton(
+                                                            onPressed:
+                                                                () => {
+                                                                      deleteStudent(
+                                                                          _students[index]
+                                                                              .cod),
+                                                                      Navigator.pop(
+                                                                          context)
+                                                                    },
+                                                            child: const Text(
+                                                                SchoolStrings
+                                                                    .delete)),
                                                   )
                                                 ],
                                               ),
@@ -215,31 +219,24 @@ class _StudentViewState extends State<StudentView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: loadData,
-        tooltip: 'Increment',
-        child: const Icon(Icons.refresh),
+        tooltip: SchoolStrings.refresh,
+        backgroundColor: SchoolColors.darkBackground,
+        child: SchoolIcons.schoolRefreshIcon,
       ),
     );
   }
 
   loadData() async {
-    var temp = await _controller.getStudent();
+    var tempStudents = await _controller.getStudent();
     setState(() {
-      _fullStudents = temp;
+      _fullStudents = tempStudents;
       _students = _fullStudents;
     });
   }
 
   filterData(String text) {
     setState(() {
-      if (text.length > 0) {
-        _students = _fullStudents
-            .where((student) =>
-                student.name.substring(0, text.length).toLowerCase() ==
-                text.toLowerCase())
-            .toList();
-      } else {
-        _students = _fullStudents;
-      }
+      _students = _controller.filterStudents(text, _fullStudents);
     });
   }
 

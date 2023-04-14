@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:schoolapp/src/class_view/class_model.dart';
+import 'package:schoolapp/src/common/utilities/school_colors.dart';
+import 'package:schoolapp/src/common/utilities/school_icons.dart';
+import 'package:schoolapp/src/common/utilities/school_numeric_atributes.dart';
+import 'package:schoolapp/src/common/utilities/school_strings.dart';
 import 'package:schoolapp/src/componnents/student_item.dart';
 import 'package:schoolapp/src/register_view/register_controller.dart';
 import 'package:schoolapp/src/register_view/register_model.dart';
+import 'package:schoolapp/src/students_view/student_model.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -11,17 +17,19 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  List<RegisterModel> _fullClasses = [];
-  List<RegisterModel> _classes = [];
-  String _description = '';
-  String _synopsis = '';
-  bool _editing = false;
+  List<ClassModel> _fullClasses = [];
+  List<RegisterModel> _fullRegisters = [];
+  List<StudentModel> _fullStudents = [];
+  List<RegisterModel> _registers = [];
+  List<StudentModel> _students = [];
+
+  String _dropDownClassValue = '';
+  String _dropDownStudentValue = '';
 
   final RegisterController _controller = RegisterController();
   @override
   void initState() {
     super.initState();
-    _controller.getRegister();
     loadData();
   }
 
@@ -29,72 +37,102 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 71, 166, 213),
-        title: Text("Cursos"),
+        backgroundColor: SchoolColors.lightBackground,
+        title: const Text(SchoolStrings.registerTitle),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: SchoolPadding.medium,
             child: GestureDetector(
-              child: Container(
-                height: 35,
-                width: 85,
-                color: Color.fromARGB(255, 62, 145, 187),
-                child: ElevatedButton(
-                  child: Text("Novo"),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 52, 120, 154)),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(builder: (context, setState) {
-                            return Container(
-                              height: MediaQuery.of(context).size.height * 0.95,
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  TextField(
-                                    decoration:
-                                        InputDecoration(labelText: 'Nome'),
-                                    onChanged: (value) =>
-                                        {_description = value},
-                                  ),
-                                  TextField(
-                                    maxLines: null,
-                                    decoration:
-                                        InputDecoration(labelText: 'Ementa'),
-                                    onChanged: (value) => {_synopsis = value},
-                                  ),
-                                  Center(
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                          flex: 1,
-                                          child: ElevatedButton(
-                                              onPressed: () => {
-                                                    addClass(_description,
-                                                        _synopsis),
-                                                    Navigator.pop(context)
-                                                  },
-                                              child: Text('Salvar')),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text('Cancelar')),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: SchoolColors.darkBackground),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return Container(
+                            color: SchoolColors.lightButtonColor,
+                            child: Column(
+                              children: [
+                                DropdownButton<String>(
+                                    hint: const Text(
+                                        SchoolStrings.newRegisterClassTitle),
+                                    value: (_dropDownClassValue.isEmpty
+                                        ? null
+                                        : _dropDownClassValue),
+                                    items: _fullClasses
+                                        .map(
+                                          (option) => DropdownMenuItem(
+                                            value: option.cod.toString(),
+                                            child: Text(option.description),
+                                          ),
                                         )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          });
-                        });
-                  },
-                ),
+                                        .toList(),
+                                    onChanged: (value) => {
+                                          setState(() => {
+                                                _dropDownClassValue =
+                                                    value.toString()
+                                              }),
+                                        }),
+                                DropdownButton<String>(
+                                    hint: const Text(
+                                        SchoolStrings.newRegisterStudentTitle),
+                                    value: (_dropDownStudentValue.isEmpty
+                                        ? null
+                                        : _dropDownStudentValue),
+                                    items: _fullStudents
+                                        .map(
+                                          (option) => DropdownMenuItem(
+                                            value: option.cod.toString(),
+                                            child: Text(option.name),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) => {
+                                          setState(() => {
+                                                _dropDownStudentValue =
+                                                    value.toString()
+                                              }),
+                                        }),
+                                Center(
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        flex: 1,
+                                        child: ElevatedButton(
+                                            onPressed: () => {
+                                                  addRegister(
+                                                      _dropDownClassValue,
+                                                      _dropDownStudentValue),
+                                                  _dropDownClassValue = '',
+                                                  _dropDownStudentValue = '',
+                                                  Navigator.pop(context)
+                                                },
+                                            child: const Text(
+                                                SchoolStrings.saveRecord)),
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: ElevatedButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text(
+                                                SchoolStrings.cancel)),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+                child: const Text(SchoolStrings.newRecord),
               ),
             ),
           )
@@ -106,41 +144,38 @@ class _RegisterViewState extends State<RegisterView> {
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
                 colors: [
-              Color.fromARGB(255, 40, 100, 125),
-              Color.fromARGB(255, 71, 166, 213)
+              SchoolColors.darkBackground,
+              SchoolColors.lightBackground
             ])),
         child: Column(
           children: [
             Flexible(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Nome',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusColor: Colors.red,
+                  padding: SchoolPadding.medium,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: SchoolStrings.registrationFilterTitle,
+                      border: OutlineInputBorder(
+                        borderRadius: SchoolBorderRadius.medium,
                       ),
-                      onChanged: (value) => filterData(value, 'text'),
                     ),
+                    onChanged: (value) => filterData(value, 'text'),
                   ),
                 )),
             Flexible(
               flex: 10,
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: SchoolPadding.medium,
                 child: ListView.builder(
-                  itemCount: _classes.length,
+                  itemCount: _registers.length,
                   itemBuilder: (context, index) {
                     return StudentItem(
-                        id: _classes[index].codClass,
-                        name: _classes[index].descClass,
+                        id: _registers[index].codClass,
+                        name: _registers[index].descClass,
                         onPress: () => {
-                              filterData(
-                                  _classes[index].codClass.toString(), 'class'),
+                              filterData(_registers[index].codClass.toString(),
+                                  'class'),
                               showModalBottomSheet(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -148,17 +183,21 @@ class _RegisterViewState extends State<RegisterView> {
                                       children: [
                                         Row(children: [
                                           ElevatedButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                  'Remover todos os alunos')),
+                                              onPressed: () {
+                                                deleteAll(_registers[index]
+                                                    .codRegister);
+                                              },
+                                              child: const Text(
+                                                  SchoolStrings.deleteAll)),
                                         ]),
                                         Expanded(
                                           child: ListView.builder(
-                                            itemCount: _classes.length,
+                                            itemCount: _registers.length,
                                             itemBuilder: (context, index) {
                                               return StudentItem(
-                                                  id: _classes[index].codClass,
-                                                  name: _classes[index]
+                                                  id: _registers[index]
+                                                      .codRegister,
+                                                  name: _registers[index]
                                                       .descstudent,
                                                   onPress: () => {
                                                         showModalBottomSheet(
@@ -168,9 +207,14 @@ class _RegisterViewState extends State<RegisterView> {
                                                                     context) {
                                                               return ElevatedButton(
                                                                   onPressed:
-                                                                      () {},
-                                                                  child: Text(
-                                                                      'Remover Aluno'));
+                                                                      () {
+                                                                    deleteRegister(
+                                                                        _registers[index]
+                                                                            .codRegister);
+                                                                  },
+                                                                  child: const Text(
+                                                                      SchoolStrings
+                                                                          .deleteStudent));
                                                             })
                                                       });
                                             },
@@ -189,37 +233,43 @@ class _RegisterViewState extends State<RegisterView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: loadData,
-        tooltip: 'Increment',
-        child: const Icon(Icons.refresh),
+        tooltip: SchoolStrings.refresh,
+        backgroundColor: SchoolColors.darkBackground,
+        child: SchoolIcons.schoolRefreshIcon,
       ),
     );
   }
 
   loadData() async {
-    var temp = await _controller.getRegister();
+    var tempClasses = await _controller.getClass();
+    var tempRegisters = await _controller.getRegister();
+    var tempStudents = await _controller.getStudent();
     setState(() {
-      _fullClasses = temp;
-      _classes = _fullClasses;
+      _fullClasses = tempClasses;
+      _fullRegisters = tempRegisters;
+      _registers = _fullRegisters;
+      _fullStudents = tempStudents;
+      _students = _fullStudents;
     });
   }
 
   filterData(String text, type) {
     setState(() {
-      if (text.length > 0) {
+      if (text.isNotEmpty) {
         if (type == 'class') {
-          _classes = _fullClasses
-              .where((student) => student.codClass.toString() == text)
+          _registers = _fullRegisters
+              .where((register) => register.codClass.toString() == text)
               .toList();
         } else {
-          _classes = _fullClasses
-              .where((student) =>
-                  student.descClass.substring(0, text.length).toLowerCase() ==
+          _registers = _fullRegisters
+              .where((register) =>
+                  register.descClass.substring(0, text.length).toLowerCase() ==
                   text.toLowerCase())
               .toList();
-          if (_classes.length == 0) {
-            _classes = _fullClasses
-                .where((student) =>
-                    student.descstudent
+          if (_registers.isEmpty) {
+            _registers = _fullRegisters
+                .where((register) =>
+                    register.descstudent
                         .substring(0, text.length)
                         .toLowerCase() ==
                     text.toLowerCase())
@@ -227,16 +277,20 @@ class _RegisterViewState extends State<RegisterView> {
           }
         }
       } else {
-        _classes = _fullClasses;
+        _registers = _fullRegisters;
       }
     });
   }
 
-  addClass(description, synopsis) {
-    _controller.addRegister(description, synopsis);
+  addRegister(selectedClass, selectedStudent) {
+    _controller.addRegister(selectedClass, selectedStudent);
   }
 
-  deleteClass(id) {
+  deleteRegister(id) {
     _controller.deleteRegister(id);
+  }
+
+  deleteAll(id) {
+    _controller.deleteAllRegisters(id);
   }
 }
