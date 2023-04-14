@@ -252,7 +252,7 @@ class _ClassViewState extends State<ClassView> {
                                                                           .darkBackground),
                                                           child: const Text(
                                                               SchoolStrings
-                                                                  .cancel)),
+                                                                  .delete)),
                                                     ),
                                                   )
                                                 ],
