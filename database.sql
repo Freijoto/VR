@@ -1,14 +1,12 @@
 CREATE SCHEMA dbo AUTHORIZATION postgres;
 
--- Creation of "Aluno" Table;
+-- Creation of Tables
 
 CREATE TABLE dbo.aluno (
 	codigo serial4 NOT NULL,
 	nome varchar(50) NOT NULL,
 	CONSTRAINT aluno_pkey PRIMARY KEY (codigo)
 );
-
--- Creation of "Curso" Table;
 
 CREATE TABLE dbo.curso (
 	codigo serial4 NOT NULL,
@@ -17,14 +15,21 @@ CREATE TABLE dbo.curso (
 	CONSTRAINT curso_pkey PRIMARY KEY (codigo)
 );
 
--- Creation of "Curso_Aluno" Table;
-
 CREATE TABLE dbo.curso_aluno (
 	codigo serial4 NOT NULL,
 	codigo_aluno int4 NOT NULL,
 	codigo_curso int4 NOT NULL,
 	CONSTRAINT curso_aluno_pkey PRIMARY KEY (codigo_aluno, codigo_curso)
 );
+
+
+-- dbo.curso_aluno foreign keys
+
+ALTER TABLE dbo.curso_aluno ADD CONSTRAINT curso_aluno_fk FOREIGN KEY (codigo_curso) REFERENCES dbo.curso(codigo);
+ALTER TABLE dbo.curso_aluno ADD CONSTRAINT curso_aluno_fk_1 FOREIGN KEY (codigo_aluno) REFERENCES dbo.aluno(codigo);
+
+
+-- Procedures/functions
 
 CREATE OR REPLACE PROCEDURE dbo.add_aluno(IN nomearg character varying)
  LANGUAGE sql
@@ -69,6 +74,13 @@ AS $procedure$
 $procedure$
 ;
 
+CREATE OR REPLACE PROCEDURE dbo.del_matriculas_curso(IN codigoarg integer)
+ LANGUAGE sql
+AS $procedure$
+	delete from dbo.curso_aluno where codigo_curso  = codigoArg;
+$procedure$
+;
+
 CREATE OR REPLACE FUNCTION dbo.sel_aluno(codigoarg integer DEFAULT 0)
  RETURNS TABLE(vcodigo integer, vnome character varying)
  LANGUAGE plpgsql
@@ -101,6 +113,18 @@ begin
 return query
 	select ca.codigo,ca.codigo_curso,ca.codigo_aluno,curso.descricao,aluno.nome  
 from dbo.curso_aluno ca left join dbo.aluno on ca.codigo_aluno = aluno.codigo left join dbo.curso on ca.codigo_curso = curso.codigo;
+end;
+$function$
+;
+
+CREATE OR REPLACE FUNCTION dbo.sel_curso_matriculas(codigoarg integer DEFAULT 0)
+ RETURNS TABLE(vcodigo integer, vdescricao character varying, vementa text)
+ LANGUAGE plpgsql
+AS $function$
+begin 
+return query
+	select distinct c.* from dbo.curso c inner join dbo.curso_aluno ca  on c.codigo =ca.codigo_curso 
+	where c.codigo = case when codigoarg = 0 then c.codigo else codigoarg end;
 end;
 $function$
 ;

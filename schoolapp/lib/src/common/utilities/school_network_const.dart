@@ -14,5 +14,7 @@ class SchoolNetworkStrings {
 
   static const String addRegisterRoute = '/addmatricula';
   static const String getRegisterRoute = '/matricula';
+  static const String getClassRegisterRoute = '/cursomatricula';
   static const String deleteRegisterRoute = '/delmatricula';
+  static const String deleteAllRegistersRoute = '/delmatriculascurso';
 }

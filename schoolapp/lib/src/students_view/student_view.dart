@@ -53,32 +53,48 @@ class _StudentViewState extends State<StudentView> {
                                 color: SchoolColors.lightButtonColor,
                                 child: Column(
                                   children: [
-                                    TextField(
-                                      decoration: const InputDecoration(
-                                          labelText:
-                                              SchoolStrings.studentNameTitle),
-                                      onChanged: (value) => {_name = value},
+                                    Padding(
+                                      padding: SchoolPadding.medium,
+                                      child: TextField(
+                                        decoration: const InputDecoration(
+                                            labelText:
+                                                SchoolStrings.studentNameTitle),
+                                        onChanged: (value) => {_name = value},
+                                      ),
                                     ),
                                     Center(
                                       child: Row(
                                         children: [
                                           Flexible(
                                             flex: 1,
-                                            child: ElevatedButton(
-                                                onPressed: () => {
-                                                      addStudent(_name),
-                                                      Navigator.pop(context)
-                                                    },
-                                                child: const Text(
-                                                    SchoolStrings.saveRecord)),
+                                            child: Center(
+                                              child: ElevatedButton(
+                                                  onPressed: () => {
+                                                        addStudent(_name),
+                                                        Navigator.pop(context)
+                                                      },
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                          SchoolColors
+                                                              .darkBackground),
+                                                  child: const Text(
+                                                      SchoolStrings
+                                                          .saveRecord)),
+                                            ),
                                           ),
                                           Flexible(
                                             flex: 1,
-                                            child: ElevatedButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                                child: const Text(
-                                                    SchoolStrings.cancel)),
+                                            child: Center(
+                                              child: ElevatedButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                          SchoolColors
+                                                              .darkBackground),
+                                                  child: const Text(
+                                                      SchoolStrings.cancel)),
+                                            ),
                                           )
                                         ],
                                       ),
@@ -141,65 +157,80 @@ class _StudentViewState extends State<StudentView> {
                                         color: SchoolColors.lightButtonColor,
                                         child: Column(
                                           children: [
-                                            TextField(
-                                              enabled: _editing,
-                                              decoration: const InputDecoration(
-                                                  labelText: SchoolStrings
-                                                      .studentNameTitle),
-                                              controller:
-                                                  (TextEditingController(
-                                                      text: _students[index]
-                                                          .name)),
-                                              onChanged: (value) =>
-                                                  {_name = value},
+                                            Padding(
+                                              padding: SchoolPadding.medium,
+                                              child: TextField(
+                                                enabled: _editing,
+                                                decoration:
+                                                    const InputDecoration(
+                                                        labelText: SchoolStrings
+                                                            .studentNameTitle),
+                                                controller:
+                                                    (TextEditingController(
+                                                        text: _students[index]
+                                                            .name)),
+                                                onChanged: (value) =>
+                                                    {_name = value},
+                                              ),
                                             ),
                                             Center(
                                               child: Row(
                                                 children: [
                                                   Flexible(
                                                     flex: 1,
-                                                    child: ElevatedButton(
-                                                        onPressed: () => {
-                                                              if (_editing)
-                                                                {
-                                                                  _editing =
-                                                                      false,
-                                                                  editStudent(
-                                                                      _students[
-                                                                              index]
-                                                                          .cod,
-                                                                      _name),
-                                                                  Navigator.pop(
-                                                                      context)
-                                                                }
-                                                              else
-                                                                {
-                                                                  setState(() =>
-                                                                      {
-                                                                        _editing =
-                                                                            true
-                                                                      })
-                                                                }
-                                                            },
-                                                        child: const Text(
-                                                            SchoolStrings
-                                                                .edit)),
+                                                    child: Center(
+                                                      child: ElevatedButton(
+                                                          onPressed: () => {
+                                                                if (_editing)
+                                                                  {
+                                                                    _editing =
+                                                                        false,
+                                                                    editStudent(
+                                                                        _students[index]
+                                                                            .cod,
+                                                                        _name),
+                                                                    Navigator.pop(
+                                                                        context)
+                                                                  }
+                                                                else
+                                                                  {
+                                                                    setState(
+                                                                        () => {
+                                                                              _editing = true
+                                                                            })
+                                                                  }
+                                                              },
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  backgroundColor:
+                                                                      SchoolColors
+                                                                          .darkBackground),
+                                                          child: const Text(
+                                                              SchoolStrings
+                                                                  .edit)),
+                                                    ),
                                                   ),
                                                   Flexible(
                                                     flex: 1,
-                                                    child:
-                                                        ElevatedButton(
-                                                            onPressed:
-                                                                () => {
-                                                                      deleteStudent(
-                                                                          _students[index]
-                                                                              .cod),
-                                                                      Navigator.pop(
-                                                                          context)
-                                                                    },
-                                                            child: const Text(
-                                                                SchoolStrings
-                                                                    .delete)),
+                                                    child: Center(
+                                                      child: ElevatedButton(
+                                                          onPressed:
+                                                              () => {
+                                                                    deleteStudent(
+                                                                        _students[index]
+                                                                            .cod),
+                                                                    Navigator.pop(
+                                                                        context)
+                                                                  },
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  backgroundColor:
+                                                                      SchoolColors
+                                                                          .darkBackground),
+                                                          child: const Text(
+                                                              SchoolStrings
+                                                                  .delete)),
+                                                    ),
                                                   )
                                                 ],
                                               ),

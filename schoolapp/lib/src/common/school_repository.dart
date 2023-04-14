@@ -27,8 +27,9 @@ class SchoolRepository {
 
     if (response.statusCode == 200) {
       List<StudentModel> students = [];
-      var son = json.decode(response.body);
-      son.forEach((record) => {students.add(StudentModel.fromMap(record))});
+      var decodedJson = json.decode(response.body);
+      decodedJson
+          .forEach((record) => {students.add(StudentModel.fromMap(record))});
 
       return students;
     } else {
@@ -51,8 +52,9 @@ class SchoolRepository {
 
     if (response.statusCode == 200) {
       List<ClassModel> classes = [];
-      var son = json.decode(response.body);
-      son.forEach((record) => {classes.add(ClassModel.fromMap(record))});
+      var decodedJson = json.decode(response.body);
+      decodedJson
+          .forEach((record) => {classes.add(ClassModel.fromMap(record))});
 
       return classes;
     } else {
@@ -75,8 +77,9 @@ class SchoolRepository {
 
     if (response.statusCode == 200) {
       List<RegisterModel> registers = [];
-      var son = json.decode(response.body);
-      son.forEach((record) => {registers.add(RegisterModel.fromMap(record))});
+      var decodedJson = json.decode(response.body);
+      decodedJson
+          .forEach((record) => {registers.add(RegisterModel.fromMap(record))});
 
       return registers;
     } else {
@@ -118,7 +121,7 @@ class SchoolRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw json.decode(response.body)['error']['message'];
+      throw json.decode(response.body)['message'];
     }
   }
 

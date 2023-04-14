@@ -7,6 +7,15 @@ import 'package:schoolapp/src/students_view/student_model.dart';
 class RegisterController {
   static SchoolRepository repository = SchoolRepository.instance;
 
+  Future<List<ClassModel>> getClassRegister() async {
+    Map<String, String> parameters = {
+      'codigo': '0',
+    };
+    List<ClassModel> classes = await repository.getClasses(
+        parameters, SchoolNetworkStrings.getClassRegisterRoute);
+    return classes;
+  }
+
   Future<List<ClassModel>> getClass() async {
     Map<String, String> parameters = {
       'codigo': '0',
@@ -35,8 +44,8 @@ class RegisterController {
 
   addRegister(selectedClass, selectedStudent) {
     Map<String, String> parameters = {
-      'codcurso': "'$selectedClass'",
-      'codaluno': "'$selectedStudent'",
+      'codcurso': "$selectedClass",
+      'codaluno': "$selectedStudent",
     };
     repository.addRecord(parameters, SchoolNetworkStrings.addRegisterRoute);
   }
@@ -50,6 +59,6 @@ class RegisterController {
   deleteAllRegisters(id) {
     Map<String, String> parameters = {'codigo': id.toString()};
     repository.deleteRecord(
-        parameters, SchoolNetworkStrings.deleteRegisterRoute);
+        parameters, SchoolNetworkStrings.deleteAllRegistersRoute);
   }
 }

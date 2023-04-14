@@ -18,6 +18,7 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   List<ClassModel> _fullClasses = [];
+  List<ClassModel> _fullClassesregister = [];
   List<RegisterModel> _fullRegisters = [];
   List<StudentModel> _fullStudents = [];
   List<RegisterModel> _registers = [];
@@ -52,79 +53,101 @@ class _RegisterViewState extends State<RegisterView> {
                     builder: (BuildContext context) {
                       return StatefulBuilder(
                         builder: (context, setState) {
-                          return Container(
-                            color: SchoolColors.lightButtonColor,
-                            child: Column(
-                              children: [
-                                DropdownButton<String>(
-                                    hint: const Text(
-                                        SchoolStrings.newRegisterClassTitle),
-                                    value: (_dropDownClassValue.isEmpty
-                                        ? null
-                                        : _dropDownClassValue),
-                                    items: _fullClasses
-                                        .map(
-                                          (option) => DropdownMenuItem(
-                                            value: option.cod.toString(),
-                                            child: Text(option.description),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) => {
-                                          setState(() => {
-                                                _dropDownClassValue =
-                                                    value.toString()
-                                              }),
-                                        }),
-                                DropdownButton<String>(
-                                    hint: const Text(
-                                        SchoolStrings.newRegisterStudentTitle),
-                                    value: (_dropDownStudentValue.isEmpty
-                                        ? null
-                                        : _dropDownStudentValue),
-                                    items: _fullStudents
-                                        .map(
-                                          (option) => DropdownMenuItem(
-                                            value: option.cod.toString(),
-                                            child: Text(option.name),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) => {
-                                          setState(() => {
-                                                _dropDownStudentValue =
-                                                    value.toString()
-                                              }),
-                                        }),
-                                Center(
-                                  child: Row(
-                                    children: [
-                                      Flexible(
-                                        flex: 1,
-                                        child: ElevatedButton(
-                                            onPressed: () => {
-                                                  addRegister(
-                                                      _dropDownClassValue,
-                                                      _dropDownStudentValue),
-                                                  _dropDownClassValue = '',
-                                                  _dropDownStudentValue = '',
-                                                  Navigator.pop(context)
-                                                },
-                                            child: const Text(
-                                                SchoolStrings.saveRecord)),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text(
-                                                SchoolStrings.cancel)),
-                                      )
-                                    ],
+                          return Expanded(
+                            child: Container(
+                              color: SchoolColors.lightButtonColor,
+                              child: Column(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    child: DropdownButton<String>(
+                                        hint: const Text(SchoolStrings
+                                            .newRegisterClassTitle),
+                                        value: (_dropDownClassValue.isEmpty
+                                            ? null
+                                            : _dropDownClassValue),
+                                        items: _fullClasses
+                                            .map(
+                                              (option) => DropdownMenuItem(
+                                                value: option.cod.toString(),
+                                                child: Text(option.description),
+                                              ),
+                                            )
+                                            .toList(),
+                                        onChanged: (value) => {
+                                              setState(() => {
+                                                    _dropDownClassValue =
+                                                        value.toString()
+                                                  }),
+                                            }),
                                   ),
-                                )
-                              ],
+                                  Flexible(
+                                    flex: 1,
+                                    child: DropdownButton<String>(
+                                        hint: const Text(SchoolStrings
+                                            .newRegisterStudentTitle),
+                                        value: (_dropDownStudentValue.isEmpty
+                                            ? null
+                                            : _dropDownStudentValue),
+                                        items: _fullStudents
+                                            .map(
+                                              (option) => DropdownMenuItem(
+                                                value: option.cod.toString(),
+                                                child: Text(option.name),
+                                              ),
+                                            )
+                                            .toList(),
+                                        onChanged: (value) => {
+                                              setState(() => {
+                                                    _dropDownStudentValue =
+                                                        value.toString()
+                                                  }),
+                                            }),
+                                  ),
+                                  Flexible(
+                                    flex: 3,
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          flex: 1,
+                                          child: Center(
+                                            child: ElevatedButton(
+                                                onPressed: () => {
+                                                      addRegister(
+                                                          _dropDownClassValue,
+                                                          _dropDownStudentValue),
+                                                      _dropDownClassValue = '',
+                                                      _dropDownStudentValue =
+                                                          '',
+                                                      Navigator.pop(context)
+                                                    },
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        SchoolColors
+                                                            .darkBackground),
+                                                child: const Text(
+                                                    SchoolStrings.saveRecord)),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Center(
+                                            child: ElevatedButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        SchoolColors
+                                                            .darkBackground),
+                                                child: const Text(
+                                                    SchoolStrings.cancel)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -168,13 +191,14 @@ class _RegisterViewState extends State<RegisterView> {
               child: Padding(
                 padding: SchoolPadding.medium,
                 child: ListView.builder(
-                  itemCount: _registers.length,
+                  itemCount: _fullClassesregister.length,
                   itemBuilder: (context, index) {
                     return StudentItem(
-                        id: _registers[index].codClass,
-                        name: _registers[index].descClass,
+                        id: _fullClassesregister[index].cod,
+                        name: _fullClassesregister[index].description,
                         onPress: () => {
-                              filterData(_registers[index].codClass.toString(),
+                              filterData(
+                                  _fullClassesregister[index].cod.toString(),
                                   'class'),
                               showModalBottomSheet(
                                   context: context,
@@ -182,13 +206,18 @@ class _RegisterViewState extends State<RegisterView> {
                                     return Column(
                                       children: [
                                         Row(children: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                deleteAll(_registers[index]
-                                                    .codRegister);
-                                              },
-                                              child: const Text(
-                                                  SchoolStrings.deleteAll)),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                                onPressed: () {
+                                                  deleteAll(
+                                                      _fullClassesregister[
+                                                              index]
+                                                          .cod);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text(
+                                                    SchoolStrings.deleteAll)),
+                                          ),
                                         ]),
                                         Expanded(
                                           child: ListView.builder(
@@ -206,15 +235,19 @@ class _RegisterViewState extends State<RegisterView> {
                                                                 (BuildContext
                                                                     context) {
                                                               return ElevatedButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    deleteRegister(
-                                                                        _registers[index]
-                                                                            .codRegister);
-                                                                  },
-                                                                  child: const Text(
-                                                                      SchoolStrings
-                                                                          .deleteStudent));
+                                                                onPressed: () {
+                                                                  deleteRegister(
+                                                                      _registers[
+                                                                              index]
+                                                                          .codRegister);
+
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child: const Text(
+                                                                    SchoolStrings
+                                                                        .deleteStudent),
+                                                              );
                                                             })
                                                       });
                                             },
@@ -242,10 +275,12 @@ class _RegisterViewState extends State<RegisterView> {
 
   loadData() async {
     var tempClasses = await _controller.getClass();
+    var tempClassesregister = await _controller.getClassRegister();
     var tempRegisters = await _controller.getRegister();
     var tempStudents = await _controller.getStudent();
     setState(() {
       _fullClasses = tempClasses;
+      _fullClassesregister = tempClassesregister;
       _fullRegisters = tempRegisters;
       _registers = _fullRegisters;
       _fullStudents = tempStudents;
